@@ -5,6 +5,7 @@ import {
   BrowserRouter as Router,
   Switch,
 } from 'react-router-dom'
+import { connect } from 'react-redux';
 
 import './App.css'
 
@@ -14,20 +15,39 @@ import Container from './Container'
 
 
 class App extends Component {
+
+  constructor(props) {
+    super();
+  }
+
   render() {
     return (
       <Router>
         <div>
           <ul>
             <li>
-              <NavLink exact activeClassName="active" to="/">
-                RoboTable
-              </NavLink>
+              {
+                this.props.isClicked ?
+                  <div className="active">
+                    RoboTable
+                  </div> 
+                :
+                  <NavLink exact activeClassName="active" to="/">
+                    RoboTable
+                  </NavLink>
+              }
             </li>
             <li>
-              <NavLink activeClassName="active" to="/settings">
-                Settings
-              </NavLink>
+              {
+                this.props.isClicked ?
+                  <div>
+                    Settings
+                  </div> 
+                :
+                  <NavLink activeClassName="active" to="/settings">
+                    Settings
+                  </NavLink>
+              }
             </li>
           </ul>
           <hr />
@@ -42,4 +62,10 @@ class App extends Component {
     }
   }
 
-  export default App;
+  const mapStateToProps = (state) => {
+    return { 
+      isClicked: state.isClicked,
+    };
+  }
+
+  export default connect(mapStateToProps)(App);

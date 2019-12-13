@@ -8,7 +8,6 @@ class  Container extends Component {
   constructor({ clickedSettings }) {
     super();
     this.state = {
-      colourHex: '#0f0',
       clickedSettings: clickedSettings,
     }
   }

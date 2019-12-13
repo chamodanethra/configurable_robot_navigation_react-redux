@@ -9,14 +9,6 @@ class  Settings extends Component {
     super();
   }
 
-  // static getDerivedStateFromProps(nextProps, prevState) {
-  //   if (prevState.selectedGridSize !== nextProps.selectedGridSize) {
-  //     return ({ selectedGridSize: nextProps.selectedGridSize }); // <- this is setState equivalent
-  //   } else {
-  //       return null;
-  //   }
-  // }
-  
   renderList(){
     return this.props.gridSizes.map ((size) => {
       let displaySize = `${size} X ${size}`

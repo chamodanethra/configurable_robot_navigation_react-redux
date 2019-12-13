@@ -2,20 +2,19 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import './RoboTable.css';
 import * as algorithm from '../algorithms/astar';
+import { clickOnGridCell } from '../actions/index'
 
 class RoboTable extends Component {
 
     constructor(props) {
         super();
-        console.log(props);
-        const { selectedColourHex, selectedGridSize } = props;
-        this.colourHex = selectedColourHex;
+        const { selectedGridSize } = props;
         this.state = {
             coordinateY: selectedGridSize - 1,
             coordinateX: 0,
             transitionCount: 0,
         };
-        this.clickCount = 0;
+        this.isClicked = false;
         this.path = [];
         this.graph = this.makeArray(selectedGridSize, selectedGridSize);
         this.randomInitializeArray();
@@ -28,7 +27,6 @@ class RoboTable extends Component {
           }
           this.graph[this.graph.length - 1][0] = 1;
         }
-        //console.log(this.graph);
     }
 
     makeArray(d1, d2) {
@@ -40,8 +38,9 @@ class RoboTable extends Component {
   }
 
     onClickCell = (newCoordinateY, newCoordinateX) => {
-      if (this.clickCount === 0) {
-        this.clickCount += 1;
+      if (!this.isClicked) {
+        this.isClicked = true;
+        this.props.clickOnGridCell(true);
         setTimeout(this.initializeAlgorithm(newCoordinateY, newCoordinateX), 151);
       }
     }
@@ -57,7 +56,6 @@ class RoboTable extends Component {
         var end = graphDataStructure.grid[newCoordinateY][newCoordinateX];
         
         var result = algorithm.astar.search(graphDataStructure, start, end);
-        // result is an array containing the shortest path
         this.path = result;
 
         if (result.length !== 0) {
@@ -67,7 +65,8 @@ class RoboTable extends Component {
             transitionCount: this.state.transitionCount + 1,
           });
         } else {
-          this.clickCount = 0;
+          this.isClicked = false;
+          this.props.clickOnGridCell(false);
         }
       }
     }
@@ -80,8 +79,9 @@ class RoboTable extends Component {
               150
             );
          } else {
-           this.setState({transitionCount: 0});
-           this.clickCount = 0;
+           this.isClicked = false;
+            this.props.clickOnGridCell(false);
+            this.setState({transitionCount: 0});
          }
        }
      }
@@ -95,8 +95,6 @@ class RoboTable extends Component {
      }
 
     render(){
-        // console.log("Inside Render");
-        // console.log(`Row = ${this.state.coordinateY}, Column = ${this.state.coordinateX}`);
         let rows = [];
         for (let i = 0; i < this.props.selectedGridSize; i++){
           let rowID = `row${i}`
@@ -107,10 +105,13 @@ class RoboTable extends Component {
                 cell.push(<td key={cellID} id={cellID} className="robo" style={{backgroundColor: `${this.props.selectedColourHex}`}}> </td>)
             } else {
               if (this.graph[i][idx] === 1) {
-                //console.log(`i = ${i} idx = ${idx} value = ${this.graph[i][idx]} cell = ${cellID}`);
-                cell.push(<td key={cellID} id={cellID} className="square" onClick={(e) => this.onClickCell(i, idx, e)}> </td>)
+                cell.push(!this.isClicked ? 
+                  <td key={cellID} id={cellID} className="unclickedSquare" onClick={(e) => this.onClickCell(i, idx, e)}> </td>
+                :
+                <td key={cellID} id={cellID} className="clickedSquare" onClick={(e) => this.onClickCell(i, idx, e)}> </td>
+                )
               } else {
-                cell.push(<td key={cellID} id={cellID} className="barrier" onClick={(e) => this.onClickCell(i, idx, e)}> </td>)
+                cell.push(<td key={cellID} id={cellID} className="barrier" > </td>)
               }
             }
           }
@@ -135,4 +136,4 @@ class RoboTable extends Component {
     };
   }
 
-export default connect(mapStateToProps)(RoboTable);
+export default connect(mapStateToProps, { clickOnGridCell })(RoboTable);

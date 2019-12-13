@@ -1,21 +1,19 @@
-.square {
-    height: 25px;
-    width: 25px;
-    background-color: #555;
-  }
+td {
+  height: 25px;
+  width: 25px;
+  background-color: #555;
+}
 
-  .robo {
-    height: 25px;
-    width: 25px;
-  }
+.unclickedSquare:active {
+  overflow:auto;
+  background-color: #000;
+}
 
-  .barrier {
-    height: 25px;
-    width: 25px;
-    background-color: #f00;
-  }
+.barrier {
+  background-color: #f00;
+}
 
-  .grid-container {
-    display: flex;
-    justify-content: center;
-  }
+.grid-container {
+  display: flex;
+  justify-content: center;
+}

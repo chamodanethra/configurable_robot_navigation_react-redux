@@ -26,8 +26,16 @@ const selectedColourHexReducer = (selectedColourHex = '#0f0', action) => {
     return selectedColourHex;
 }
 
+const isClickedReducer = (isClicked = false, action) => {
+    if (action.type === 'GRID_CELL_CLICKED') {
+        return action.payload;
+    } 
+    return isClicked;
+}
+
 export default combineReducers({
     gridSizes: gridSizesReducer,
     selectedGridSize: selectedGridSizeReducer,
     selectedColourHex: selectedColourHexReducer,
+    isClicked: isClickedReducer,
 });

@@ -12,3 +12,10 @@ export const selectColourHex = (colourHex) => {
         payload: colourHex 
     };
 };
+
+export const clickOnGridCell = (isClicked) => {
+    return {
+        type: 'GRID_CELL_CLICKED',
+        payload: isClicked
+    };
+};
